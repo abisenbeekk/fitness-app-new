@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5; /* Индиго */
+            --primary-hover: #4338ca;
+            --bg-color: #F3F4F6;
+            --card-bg: #ffffff;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --danger: #EF4444;
+            --success: #10B981;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #4F46E5, #9333EA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #F3F4F6;
+            padding-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-group { margin-bottom: 15px; }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #F9FAFB;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            background: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover { background-color: var(--primary-hover); }
+
+        /* Tabs Style */
+        .tabs {
+            display: flex;
+            background: #F3F4F6;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .hidden { display: none; }
+
+        /* Table Style */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        thead tr {
+            background-color: #F9FAFB;
+            border-bottom: 2px solid #E5E7EB;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #E5E7EB;
+            color: var(--text-main);
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        /* Тип тренировки (badge) */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-cardio { background: #EEF2FF; color: var(--primary); }
+        .badge-strength { background: #FEF3C7; color: #D97706; }
+
+        .delete-btn {
+            width: auto;
+            background-color: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .delete-btn:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .refresh-btn {
+            background-color: var(--success);
+            margin-bottom: 15px;
+            width: auto;
+            display: inline-block;
+        }
+        .refresh-btn:hover { background-color: #059669; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Fitness Tracker</h1>
+        <p style="color: var(--text-muted);">Java OOP • JDBC • REST API Project</p>
+    </header>
+
+    <div class="grid">
+        <div class="card">
+            <h2>👤 Новый пользователь</h2>
+            <div class="form-group">
+                <label>Имя пользователя</label>
+                <input type="text" id="username" placeholder="Например: Nurassul">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="example@mail.com">
+            </div>
+            <button onclick="createUser()">Создать пользователя</button>
+        </div>
+
+        <div class="card">
+            <h2>💪 Новая тренировка</h2>
+
+            <div class="form-group">
+                <label>Выберите атлета:</label>
+                <select id="userSelect"></select>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('cardio')">Running / Cardio</button>
+                <button class="tab-btn" onclick="showTab('strength')">Gym / Strength</button>
+            </div>
+
+            <div id="cardioForm">
+                <div class="form-group">
+                    <input type="text" id="c_name" placeholder="Название (Утренняя пробежка)">
+                </div>
+                <div class="grid" style="margin-bottom: 0; gap: 10px;">
+                    <input type="number" id="c_duration" placeholder="Мин">
+                    <input type="number" step="0.1" id="c_distance" placeholder="Км">
+                </div>
+                <button onclick="createCardio()" style="margin-top: 15px;">Добавить Cardio</button>
+            </div>
+
+            <div id="strengthForm" class="hidden">
+                <div class="form-group">
+                    <input type="text" id="s_name" placeholder="Название (Жим лежа)">
+                </div>
+                <div class="grid" style="margin-bottom: 0; gap: 10px;">
+                    <input type="number" id="s_duration" placeholder="Мин">
+                    <input type="number" step="0.5" id="s_weight" placeholder="Вес (кг)">
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <input type="number" id="s_reps" placeholder="Повторения">
+                </div>
+                <button onclick="createStrength()" style="margin-top: 15px;">Добавить Strength</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="margin-bottom: 0; border: none;">История тренировок</h2>
+            <button class="refresh-btn" onclick="loadWorkouts()">↻ Обновить</button>
+        </div>
+
+        <div class="table-container">
+            <table id="workoutTable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Атлет</th>
+                    <th>Тип</th>
+                    <th>Тренировка</th>
+                    <th>Детали</th> <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:8080/api";
+
+    // --- 1. Работа с Пользователями ---
+
+    async function loadUsers() {
+        try {
+            const response = await fetch(`${API_URL}/users`);
+            const users = await response.json();
+
+            const select = document.getElementById('userSelect');
+            select.innerHTML = '';
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.username} (ID: ${user.id})`;
+                select.appendChild(option);
+            });
+        } catch (e) {
+            console.error("Ошибка загрузки пользователей. Сервер запущен?", e);
+        }
+    }
+
+    async function createUser() {
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+
+        if(!username) return alert("Введите имя!");
+
+        try {
+            await fetch(`${API_URL}/users`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email })
+            });
+
+            alert("Пользователь успешно создан!");
+            loadUsers();
+            document.getElementById('username').value = '';
+            document.getElementById('email').value = '';
+        } catch(e) {
+            alert("Ошибка при создании!");
+        }
+    }
+
+    // --- 2. Работа с Тренировками ---
+
+    async function createCardio() {
+        const userId = document.getElementById('userSelect').value;
+        const name = document.getElementById('c_name').value;
+        const duration = document.getElementById('c_duration').value;
+        const distance = document.getElementById('c_distance').value;
+
+        if(!userId) return alert("Выберите пользователя!");
+
+        await fetch(`${API_URL}/workouts/cardio`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, name, duration, distance })
+        });
+
+        loadWorkouts();
+        // Очистка полей
+        document.getElementById('c_name').value = '';
+        document.getElementById('c_distance').value = '';
+    }
+
+    async function createStrength() {
+        const userId = document.getElementById('userSelect').value;
+        const name = document.getElementById('s_name').value;
+        const duration = document.getElementById('s_duration').value;
+        const weight = document.getElementById('s_weight').value;
+        const reps = document.getElementById('s_reps').value;
+
+        if(!userId) return alert("Выберите пользователя!");
+
+        await fetch(`${API_URL}/workouts/strength`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, name, duration, weight, reps })
+        });
+
+        loadWorkouts();
+        // Очистка полей
+        document.getElementById('s_name').value = '';
+        document.getElementById('s_weight').value = '';
+    }
+
+    async function loadWorkouts() {
+        try {
+            const response = await fetch(`${API_URL}/workouts`);
+            const workouts = await response.json();
+            const tbody = document.querySelector('#workoutTable tbody');
+            tbody.innerHTML = '';
+
+            // Сортировка: новые сверху
+            workouts.sort((a, b) => b.id - a.id);
+
+            if (workouts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#999;">Пока нет тренировок</td></tr>';
+                return;
+            }
+
+            workouts.forEach(w => {
+                let info = '';
+                let typeBadge = '';
+                let icon = '';
+
+                // Визуализация полиморфизма
+                if (w.type === 'CARDIO') {
+                    info = `${w.distanceKm} км`;
+                    typeBadge = '<span class="badge badge-cardio">CARDIO</span>';
+                    icon = '🏃';
+                } else {
+                    info = `${w.weightKg} кг / ${w.repetitions} повт.`;
+                    typeBadge = '<span class="badge badge-strength">GYM</span>';
+                    icon = '🏋️';
+                }
+
+                const row = `
+                        <tr>
+                            <td style="color:#999;">#${w.id}</td>
+                            <td>User ${w.userId}</td>
+                            <td>${typeBadge}</td>
+                            <td><b>${w.name}</b> <br> <span style="font-size:0.8em; color:#888;">⏱ ${w.durationMinutes} мин</span></td>
+                            <td>${info}</td>
+                            <td>
+                                <button class="delete-btn" onclick="deleteWorkout(${w.id})">Удалить</button>
+                            </td>
+                        </tr>
+                    `;
+                tbody.innerHTML += row;
+            });
+        } catch(e) {
+            console.log("Ошибка загрузки тренировок");
+        }
+    }
+
+    async function deleteWorkout(id) {
+        if(!confirm("Удалить эту запись?")) return;
+        await fetch(`${API_URL}/workouts/${id}`, { method: 'DELETE' });
+        loadWorkouts();
+    }
+
+    // --- Утилиты ---
+    function showTab(type) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if(type === 'cardio') {
+            document.getElementById('cardioForm').classList.remove('hidden');
+            document.getElementById('strengthForm').classList.add('hidden');
+            document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        } else {
+            document.getElementById('cardioForm').classList.add('hidden');
+            document.getElementById('strengthForm').classList.remove('hidden');
+            document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        }
+    }
+
+    // Автозапуск
+    loadUsers();
+    loadWorkouts();
+
+</script>
+</body>
+</html>
