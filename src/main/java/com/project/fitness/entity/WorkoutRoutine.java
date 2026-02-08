@@ -16,7 +16,6 @@ public abstract class WorkoutRoutine {
         this.durationMinutes = durationMinutes;
         this.type = type;
     }
-
     public WorkoutRoutine() {
     }
 

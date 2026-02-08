@@ -13,7 +13,6 @@ import java.util.Optional;
 @Repository
 public class WorkoutRepository {
 
-    // Настройки подключения
     private final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private final String USER = "postgres";
     private final String PASS = "ayau123";
@@ -22,7 +21,6 @@ public class WorkoutRepository {
         return DriverManager.getConnection(URL, USER, PASS);
     }
 
-    // --- CREATE ---
     public void save(WorkoutRoutine workout) {
         String sql = "INSERT INTO workouts (user_id, name, duration_minutes, workout_type, distance_km, weight_kg, repetitions) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -32,9 +30,8 @@ public class WorkoutRepository {
             stmt.setLong(1, workout.getUserId());
             stmt.setString(2, workout.getName());
             stmt.setInt(3, workout.getDurationMinutes());
-            stmt.setString(4, workout.getType()); // Сохраняем "CARDIO" или "STRENGTH"
+            stmt.setString(4, workout.getType());
 
-            // Заполняем специфичные поля, остальные оставляем NULL
             if (workout instanceof CardioWorkout) {
                 stmt.setDouble(5, ((CardioWorkout) workout).getDistanceKm());
                 stmt.setObject(6, null);
@@ -51,7 +48,6 @@ public class WorkoutRepository {
         }
     }
 
-    // --- READ ALL ---
     public List<WorkoutRoutine> findAll() {
         List<WorkoutRoutine> workouts = new ArrayList<>();
         String sql = "SELECT * FROM workouts";
@@ -69,7 +65,6 @@ public class WorkoutRepository {
         return workouts;
     }
 
-    // --- READ ONE ---
     public Optional<WorkoutRoutine> findById(Long id) {
         String sql = "SELECT * FROM workouts WHERE id = ?";
         try (Connection conn = getConnection();
@@ -83,7 +78,6 @@ public class WorkoutRepository {
         return Optional.empty();
     }
 
-    // --- UPDATE ---
     public void update(Long id, WorkoutRoutine workout) {
         String sql = "UPDATE workouts SET name=?, duration_minutes=?, distance_km=?, weight_kg=?, repetitions=? WHERE id=?";
 
@@ -110,7 +104,6 @@ public class WorkoutRepository {
         }
     }
 
-    // --- DELETE ---
     public void delete(Long id) {
         String sql = "DELETE FROM workouts WHERE id = ?";
         try (Connection conn = getConnection();
@@ -122,7 +115,6 @@ public class WorkoutRepository {
         }
     }
 
-    // Вспомогательный метод маппинга
     private WorkoutRoutine mapRowToWorkout(ResultSet rs) throws SQLException {
         String type = rs.getString("workout_type");
         Long id = rs.getLong("id");

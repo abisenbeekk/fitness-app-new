@@ -19,19 +19,16 @@ public class WorkoutController {
         this.repository = repository;
     }
 
-    // 1. GET ALL
     @GetMapping
     public List<WorkoutRoutine> getAll() {
         return repository.findAll();
     }
 
-    // 2. GET BY ID
     @GetMapping("/{id}")
     public WorkoutRoutine getOne(@PathVariable Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
     }
 
-    // 3. CREATE CARDIO
     @PostMapping("/cardio")
     public String createCardio(@RequestBody CardioRequest dto) {
         CardioWorkout workout = new CardioWorkout(null, dto.userId, dto.name, dto.duration, dto.distance);
@@ -39,7 +36,6 @@ public class WorkoutController {
         return "Cardio Workout Created!";
     }
 
-    // 4. CREATE STRENGTH
     @PostMapping("/strength")
     public String createStrength(@RequestBody StrengthRequest dto) {
         StrengthWorkout workout = new StrengthWorkout(null, dto.userId, dto.name, dto.duration, dto.weight, dto.reps);
@@ -47,7 +43,6 @@ public class WorkoutController {
         return "Strength Workout Created!";
     }
 
-    // 5. UPDATE (Пример обновления Кардио)
     @PutMapping("/{id}/cardio")
     public String updateCardio(@PathVariable Long id, @RequestBody CardioRequest dto) {
         CardioWorkout workout = new CardioWorkout(id, dto.userId, dto.name, dto.duration, dto.distance);
@@ -55,14 +50,12 @@ public class WorkoutController {
         return "Workout Updated!";
     }
 
-    // 6. DELETE
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         repository.delete(id);
         return "Workout Deleted!";
     }
 
-    // DTO классы для JSON
     static class CardioRequest {
         public Long userId;
         public String name;

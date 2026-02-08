@@ -9,7 +9,6 @@ public class StrengthWorkout extends WorkoutRoutine {
         this.weightKg = weightKg;
         this.repetitions = reps;
     }
-
     public void setWeightKg(double weightKg) {
         this.weightKg = weightKg;
     }

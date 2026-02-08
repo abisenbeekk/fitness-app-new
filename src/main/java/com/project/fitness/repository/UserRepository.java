@@ -13,13 +13,12 @@ public class UserRepository {
 
     private final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private final String USER = "postgres";
-    private final String PASS = "ayau123"; // ТВОЙ ПАРОЛЬ
+    private final String PASS = "ayau123";
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
     }
 
-    // 1. CREATE
     public void save(User user) {
         String sql = "INSERT INTO users (username, email) VALUES (?, ?)";
         try (Connection conn = getConnection();
@@ -34,7 +33,6 @@ public class UserRepository {
         }
     }
 
-    // 2. READ ALL
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
@@ -56,7 +54,6 @@ public class UserRepository {
         return users;
     }
 
-    // 3. READ ONE
     public Optional<User> findById(Long id) {
         String sql = "SELECT * FROM users WHERE id = ?";
         try (Connection conn = getConnection();
@@ -78,7 +75,6 @@ public class UserRepository {
         return Optional.empty();
     }
 
-    // 4. UPDATE
     public void update(Long id, User user) {
         String sql = "UPDATE users SET username = ?, email = ? WHERE id = ?";
         try (Connection conn = getConnection();
@@ -94,7 +90,6 @@ public class UserRepository {
         }
     }
 
-    // 5. DELETE
     public void delete(Long id) {
         // У нас стоит ON DELETE CASCADE в базе, так что тренировки юзера удалятся сами
         String sql = "DELETE FROM users WHERE id = ?";

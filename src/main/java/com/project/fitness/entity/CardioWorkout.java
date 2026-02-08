@@ -8,7 +8,6 @@ public class CardioWorkout extends WorkoutRoutine {
         super(id, userId, name, duration, "CARDIO");
         this.distanceKm = distanceKm;
     }
-
     @Override
     public String getWorkoutType() {
         return "CARDIO";
