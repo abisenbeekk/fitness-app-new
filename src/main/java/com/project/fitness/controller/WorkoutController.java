@@ -49,7 +49,6 @@ public class WorkoutController {
         repository.update(id, workout);
         return "Workout Updated!";
     }
-
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         repository.delete(id);

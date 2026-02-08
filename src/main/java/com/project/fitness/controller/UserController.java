@@ -47,7 +47,6 @@ public class UserController {
         repository.delete(id);
         return "User Deleted Successfully";
     }
-
     static class UserRequest {
         public String username;
         public String email;

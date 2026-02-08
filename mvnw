@@ -103,7 +103,6 @@ trim() {
   #   exotic environments such as mingw bash on Windows.
   printf "%s" "${1}" | tr -d '[:space:]'
 }
-
 scriptDir="$(dirname "$0")"
 scriptName="$(basename "$0")"
 

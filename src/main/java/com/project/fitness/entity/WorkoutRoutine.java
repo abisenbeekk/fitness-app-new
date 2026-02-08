@@ -18,7 +18,6 @@ public abstract class WorkoutRoutine {
     }
     public WorkoutRoutine() {
     }
-
     public String getType() {
         return type;
     }

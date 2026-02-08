@@ -89,7 +89,6 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
-
     public void delete(Long id) {
         // У нас стоит ON DELETE CASCADE в базе, так что тренировки юзера удалятся сами
         String sql = "DELETE FROM users WHERE id = ?";

@@ -3,7 +3,6 @@ package com.project.fitness.entity;
 public class StrengthWorkout extends WorkoutRoutine {
     private double weightKg;
     private int repetitions;
-
     public StrengthWorkout(Long id, Long userId, String name, int duration, double weightKg, int reps) {
         super(id, userId, name, duration, "STRENGTH");
         this.weightKg = weightKg;

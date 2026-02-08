@@ -10,7 +10,6 @@ public class User {
         this.username = name;
         this.email = email;
     }
-
     public Long getId() {
         return id;
     }

@@ -114,7 +114,6 @@ public class WorkoutRepository {
             e.printStackTrace();
         }
     }
-
     private WorkoutRoutine mapRowToWorkout(ResultSet rs) throws SQLException {
         String type = rs.getString("workout_type");
         Long id = rs.getLong("id");
